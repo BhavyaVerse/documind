@@ -1,0 +1,38 @@
+{
+  "run_metadata": {
+    "timestamp": "20260627_082107",
+    "sample_size": 1,
+    "total_available": 1,
+    "estimated_cost_usd": 0.008
+  },
+  "scores": {
+    "faithfulness": NaN,
+    "answer_relevancy": NaN,
+    "context_precision": NaN
+  },
+  "company_breakdown": {
+    "Morgan Stanley": {
+      "faithfulness": NaN,
+      "answer_relevancy": NaN,
+      "context_precision": NaN,
+      "sample_count": 1
+    }
+  },
+  "per_sample": [
+    {
+      "id": "ms-001",
+      "company": "Morgan Stanley",
+      "category": "leadership",
+      "difficulty": "easy",
+      "question": "Who is the Chief Executive Officer of Morgan Stanley as of December 31, 2025?",
+      "answer_preview": "The Chief Executive Officer of Morgan Stanley as of December 31, 2025, is Edward Pick [2]. He has been the Chief Executive Officer since January 2024 [2].",
+      "citations": [
+        2
+      ],
+      "latency_ms": 1003.7,
+      "faithfulness": NaN,
+      "answer_relevancy": NaN,
+      "context_precision": NaN
+    }
+  ]
+}

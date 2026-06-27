@@ -1,0 +1,190 @@
+name: RAG Evaluation CI
+
+# it defines when to execute this specific file
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:  #manually
+    inputs:
+      sample_size:
+        description: "Number of golden dataset samples to evaluate"
+        required: false
+        default: "20"
+      dry_run:
+        description: "Dry run — print config only, skip evaluation"
+        type: boolean
+        default: false
+
+
+jobs:
+  evaluate:
+    name: RAGAS Evaluation Gate
+    runs-on: ubuntu-latest
+ 
+    steps:
+ 
+      # 1. Checkout 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true   # pull PDF files tracked by Git LFS
+ 
+      # 2. Python setup 
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+ 
+      # 3. Install dependencies
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+ 
+      # 4. Cache document indexes 
+      # Cache key is derived from an MD5 hash of all PDFs.
+      # Adding, removing, or modifying a PDF automatically invalidates the cache and triggers a fresh ingest.py run.
+      - name: Compute document fingerprint
+        id: doc-fingerprint
+        # if there is atleast one pdf present in data/documents then generating the hash key for it otherwise use a fixed value as hash key.
+        run: |
+          if ls data/documents/*.pdf 1>/dev/null 2>&1; then 
+            HASH=$(md5sum data/documents/*.pdf | md5sum | cut -d' ' -f1)
+          else
+            HASH="no-documents"
+          fi
+          echo "hash=${HASH}" >> $GITHUB_OUTPUT
+          echo "Document fingerprint: ${HASH}"
+ 
+      - name: Restore ChromaDB and BM25 index from cache
+        id: restore-indexes
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/chroma_db
+            data/bm25_index.pkl
+          key: documind-indexes-${{ steps.doc-fingerprint.outputs.hash }}
+
+      
+      # 5. Build indexes if cache missed
+      # ingest.py uses a local HuggingFace model .
+      # The HuggingFace model (~90 MB) is downloaded on the first run and cached automatically by the runner.
+      - name: Build document indexes
+        if: steps.restore-indexes.outputs.cache-hit != 'true'
+        run: |
+          echo "Cache miss — rebuilding indexes from PDFs ..."
+          python ingest.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.GROQ_API_KEY }}
+ 
+      - name: Verify indexes exist
+        run: |
+          if [ ! -d "data/chroma_db" ]; then
+            echo "ERROR: data/chroma_db not found. Check the ingest.py step above."
+            exit 1
+          fi
+          if [ ! -f "data/bm25_index.pkl" ]; then
+            echo "ERROR: data/bm25_index.pkl not found. Check the ingest.py step above."
+            exit 1
+          fi
+          echo "Indexes verified"
+ 
+      # 6. Run CI gate 
+      - name: Run RAGAS evaluation CI gate
+        run: |
+          SAMPLE_SIZE="${{ github.event.inputs.sample_size || '20' }}"
+          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
+ 
+          CMD="python evaluation/ci_gate.py --n ${SAMPLE_SIZE}"
+          if [ "${DRY_RUN}" = "true" ]; then
+            CMD="${CMD} --dry-run"
+          fi
+ 
+          echo "Running: ${CMD}"
+          ${CMD}
+        env:
+          OPENAI_API_KEY:      ${{ secrets.GROQ_API_KEY}}
+          LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+          LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+ 
+      # 7. Upload results artifact
+      # Runs even if the gate fails so you can download and inspect the results.
+      - name: Upload evaluation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-results-${{ github.run_number }}
+          path: evaluation/results/
+          retention-days: 30
+
+      # 8. Post PR comment 
+      # Posts a score table as a comment on the pull request.
+      # Only runs on pull_request events (not on push to main).
+      - name: Post results summary to PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs   = require('fs');
+            const path = require('path');
+ 
+            const resultsDir = 'evaluation/results';
+            let latestGate   = null;
+ 
+            try {
+              const files = fs.readdirSync(resultsDir)
+                .filter(f => f.startsWith('ci_gate_'))
+                .sort()
+                .reverse();
+ 
+              if (files.length > 0) {
+                const raw = fs.readFileSync(path.join(resultsDir, files[0]), 'utf8');
+                latestGate = JSON.parse(raw);
+              }
+            } catch (e) {
+              console.log('Could not read gate results:', e.message);
+            }
+ 
+            let body;
+ 
+            if (latestGate) {
+              const icon   = latestGate.passed ? '✅' : '❌';
+              const status = latestGate.passed ? 'PASSED' : 'FAILED';
+              const s      = latestGate.scores;
+              const t      = latestGate.thresholds;
+ 
+              const row = (metric, key) =>
+                `| ${metric} | ${s[key]?.toFixed(4) ?? 'N/A'} | ≥ ${t[key]} | ${s[key] >= t[key] ? '✓ Pass' : '✗ Fail'} |`;
+ 
+              body = `## ${icon} DocuMind RAG Evaluation — ${status}
+ 
+            **Samples evaluated:** ${latestGate.sample_size} &nbsp;|&nbsp; **Seed:** 42
+ 
+            | Metric | Score | Threshold | Result |
+            |--------|------:|:---------:|--------|
+            ${row('Faithfulness',      'faithfulness')}
+            ${row('Answer Relevancy',  'answer_relevancy')}
+            ${row('Context Precision', 'context_precision')}
+ 
+            ${latestGate.failures.length > 0
+              ? '**Failing metrics:**\n' + latestGate.failures.map(f => `- \`${f.trim()}\``).join('\n')
+              : '_All metrics are above their thresholds._'}
+ 
+            > Full per-sample results are available in the workflow **Artifacts** tab.`;
+            } else {
+              body = `## ⚠️ DocuMind RAG Evaluation\n\nCould not read evaluation results. Check the workflow logs for details.`;
+            }
+ 
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              body:         body,
+            });
+
+      

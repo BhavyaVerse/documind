@@ -1,0 +1,57 @@
+# .dockerignore
+# ─────────────────────────────────────────────────────────────────────────────
+# Files and folders excluded from the Docker build context.
+# A smaller build context = faster `docker build` and smaller images.
+#
+# Rule of thumb: exclude anything that either
+#   (a) changes frequently and doesn't affect the running app, or
+#   (b) contains secrets that should never be baked into an image.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Secrets — NEVER bake these into an image ──────────────────────────────────
+.env
+.env.*
+*.pem
+*.key
+
+# ── Virtual environment — not needed inside the container ─────────────────────
+venv/
+.venv/
+env/
+
+# ── Pre-built indexes — rebuilt inside the container by ingest.py ─────────────
+# (Including them would make the image unnecessarily large)
+data/chroma_db/
+data/bm25_index.pkl
+
+# ── Python cache files ────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# ── Git ───────────────────────────────────────────────────────────────────────
+.git/
+.gitignore
+.gitattributes
+
+# ── Evaluation results — not needed in production ─────────────────────────────
+evaluation/results/
+
+# ── CI / GitHub Actions ───────────────────────────────────────────────────────
+.github/
+
+# ── Editor and OS files ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# ── Documentation ─────────────────────────────────────────────────────────────
+README.md
+*.md

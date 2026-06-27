@@ -1,0 +1,569 @@
+{
+  "version": "1.0",
+  "description": "Golden evaluation dataset for DocuMind RAG system. 50 Q&A pairs drawn from SEC 10-K filings of Amazon, Alphabet, Visa, Apple, and Morgan Stanley.",
+  "metadata": {
+    "companies": ["Amazon", "Alphabet", "Visa", "Apple", "Morgan Stanley"],
+    "document_types": ["SEC 10-K Annual Report"],
+    "fiscal_years": {
+      "Amazon":         "Fiscal Year Ended December 31, 2025",
+      "Alphabet":       "Fiscal Year Ended December 31, 2025",
+      "Visa":           "Fiscal Year Ended September 30, 2025",
+      "Apple":          "Fiscal Year Ended September 27, 2025",
+      "Morgan Stanley": "Fiscal Year Ended December 31, 2025"
+    },
+    "important_note": "Ground truth answers for quantitative questions (revenue, income, headcount, etc.) are marked with [VERIFY]. Open your PDF for that company, find the relevant table or section, and replace [VERIFY: description] with the actual figure before running evaluation. Qualitative answers about business descriptions, risks, and executives are accurate as written."
+  },
+  "samples": [
+
+    {
+      "id": "amzn-001",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "business_segments",
+      "difficulty": "easy",
+      "question": "What are Amazon's three reportable business segments as described in its 2025 annual report?",
+      "ground_truth": "Amazon operates three reportable segments: North America, International, and Amazon Web Services (AWS). The North America segment includes retail sales and services to consumers and sellers in the United States and Canada. The International segment covers operations in Europe, Japan, and other international markets. AWS provides global cloud-based products and services including compute, storage, database, and machine learning capabilities.",
+      "tags": ["segments", "business_model", "amazon"]
+    },
+
+    {
+      "id": "amzn-002",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "leadership",
+      "difficulty": "easy",
+      "question": "Who serves as the Chief Executive Officer of Amazon as of fiscal year 2025?",
+      "ground_truth": "Andy Jassy serves as President and Chief Executive Officer of Amazon.",
+      "tags": ["executive", "leadership", "amazon"]
+    },
+
+    {
+      "id": "amzn-003",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Amazon's total net sales for fiscal year 2025?",
+      "ground_truth": "Amazon's total net sales for fiscal year 2025 were $716,924 million ",
+      "tags": ["revenue", "financials", "amazon"]
+    },
+
+    {
+      "id": "amzn-004",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "aws",
+      "difficulty": "medium",
+      "question": "What was AWS net sales for fiscal year 2025 and how does Amazon describe its AWS business?",
+      "ground_truth": "AWS generated net sales of 128,725 million USD for fiscal year 2025. AWS offers a broad set of global cloud-based products including compute, storage, database, analytics, machine learning, networking, mobile, developer tools, management tools, IoT, and security services. AWS generates revenue primarily from usage-based fees and fixed monthly fees charged to its customers.",
+      "tags": ["aws", "cloud", "revenue", "amazon"]
+    },
+
+    {
+      "id": "amzn-005",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "advertising",
+      "difficulty": "medium",
+      "question": "How does Amazon generate revenue from advertising services?",
+      "ground_truth": "Amazon's advertising services primarily consist of sponsored ads, display advertising, and video advertising. Advertisers pay Amazon to show ads to shoppers on Amazon's websites, apps, and devices, as well as on third-party websites and applications. Advertising revenues are primarily included within Amazon's North America and International segments and represent fees charged to sellers, vendors, publishers, authors, and others for advertising services.",
+      "tags": ["advertising", "revenue_streams", "amazon"]
+    },
+
+    {
+      "id": "amzn-006",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "risk_factors",
+      "difficulty": "medium",
+      "question": "What cybersecurity and data security risks does Amazon identify in its 2025 10-K?",
+      "ground_truth": "Amazon identifies significant cybersecurity risks including the potential for unauthorized access to customer and business data, disruption of services across its retail and AWS platforms, and sophisticated cyberattacks targeting its infrastructure. Amazon processes significant volumes of sensitive customer data and faces regulatory risks if a breach occurs. The company notes that its role as a major cloud provider and retailer makes it a high-value target, and that a serious security incident could harm its reputation and result in financial losses, customer attrition, and regulatory penalties.",
+      "tags": ["risk_factors", "cybersecurity", "amazon"]
+    },
+
+    {
+      "id": "amzn-007",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "operations",
+      "difficulty": "medium",
+      "question": "How does Amazon describe its fulfillment and logistics network?",
+      "ground_truth": "Amazon operates a global fulfillment network including fulfillment centers, delivery stations, and sortation centers. Amazon also relies on third-party delivery carriers and has built its own Amazon logistics capabilities, including Amazon Flex (crowd-sourced delivery), Amazon Air (air cargo), and last-mile delivery through Amazon delivery service partners. The fulfillment network is central to Amazon's ability to offer fast delivery, including Prime same-day and next-day delivery to customers.",
+      "tags": ["operations", "fulfillment", "logistics", "amazon"]
+    },
+
+    {
+      "id": "amzn-008",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Amazon's net income for fiscal year 2025?",
+      "ground_truth": "Amazon's net income for fiscal year 2025 was $77,670 million.",
+      "tags": ["net_income", "financials", "amazon"]
+    },
+
+    {
+      "id": "amzn-009",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "risk_factors",
+      "difficulty": "hard",
+      "question": "What regulatory and antitrust risks does Amazon identify in its 2025 annual report?",
+      "ground_truth": "Amazon faces significant regulatory and antitrust risks including government investigations and potential litigation related to its marketplace practices, the relationship between its retail business and third-party sellers, and its acquisitions. Amazon is subject to scrutiny from the Federal Trade Commission and European competition regulators. The company also faces risks from evolving regulations related to data privacy (including GDPR), product liability for items sold through its marketplace, labor and employment regulations, and potential regulations affecting its cloud, advertising, and financial services businesses.",
+      "tags": ["regulatory", "antitrust", "risk_factors", "amazon"]
+    },
+
+    {
+      "id": "amzn-010",
+      "company": "Amazon",
+      "ticker": "AMZN",
+      "category": "competition",
+      "difficulty": "medium",
+      "question": "How does Amazon describe the competitive landscape for its AWS cloud business?",
+      "ground_truth": "AWS faces competition primarily from Microsoft Azure and Google Cloud Platform, as well as other cloud providers. Competition is based on factors including price, performance, reliability, breadth of services, security, and the ability to attract and retain technical talent. Amazon notes that some competitors may have advantages in particular segments or geographies, and that cloud computing is a rapidly evolving market with new entrants and changing customer requirements.",
+      "tags": ["competition", "cloud", "aws", "amazon"]
+    },
+
+    {
+      "id": "googl-001",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "leadership",
+      "difficulty": "easy",
+      "question": "Who is the Chief Executive Officer of Alphabet Inc. as of fiscal year 2025?",
+      "ground_truth": "Sundar Pichai serves as the Chief Executive Officer of both Alphabet Inc. and Google LLC.",
+      "tags": ["executive", "leadership", "alphabet"]
+    },
+
+    {
+      "id": "googl-002",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "business_segments",
+      "difficulty": "easy",
+      "question": "What are Alphabet's reportable business segments as described in its 2025 10-K?",
+      "ground_truth": "Alphabet reports three segments: Google Services, Google Cloud, and Other Bets. Google Services includes advertising across Google Search, YouTube, and the Google Network, as well as revenues from subscriptions, platforms, and devices. Google Cloud provides infrastructure and data analytics platforms, collaboration tools, and other services to enterprise customers. Other Bets represents early-stage technology businesses pursuing longer-term opportunities.",
+      "tags": ["segments", "business_model", "alphabet"]
+    },
+
+    {
+      "id": "googl-003",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Alphabet's total revenues for fiscal year 2025?",
+      "ground_truth": "Alphabet's total revenues for fiscal year 2025 were $402,836 million.",
+      "tags": ["revenue", "financials", "alphabet"]
+    },
+
+    {
+      "id": "googl-004",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "google_cloud",
+      "difficulty": "medium",
+      "question": "What was Google Cloud's revenue for fiscal year 2025 and how does Alphabet describe its cloud business?",
+      "ground_truth": "Google Cloud revenues for fiscal year 2025 were $58,705 million. Google Cloud provides infrastructure and platform services (Google Cloud Platform), collaboration tools (Google Workspace), and other enterprise software solutions. Revenue is generated primarily from consumption-based fees for cloud infrastructure and platform services, and subscription fees for Google Workspace. Google Cloud serves businesses of all sizes and has been a key growth priority for Alphabet.",
+      "tags": ["google_cloud", "revenue", "alphabet"]
+    },
+
+    {
+      "id": "googl-005",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "ai_strategy",
+      "difficulty": "hard",
+      "question": "How does Alphabet describe its artificial intelligence strategy and investments in its 2025 annual report?",
+      "ground_truth": "Alphabet describes AI as a foundational priority across all its businesses. The company has developed the Gemini family of AI models and integrated AI capabilities into Google Search, Google Workspace, Google Cloud, and YouTube. Alphabet conducts AI research through Google DeepMind and applies AI to improve the quality and relevance of its advertising products. The company has invested heavily in AI infrastructure including custom Tensor Processing Units (TPUs) and data centers to support AI training and inference workloads. Alphabet views AI as both a significant opportunity to enhance its existing products and create new ones, and as an area of intense competition.",
+      "tags": ["ai", "strategy", "alphabet"]
+    },
+
+    {
+      "id": "googl-006",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "risk_factors",
+      "difficulty": "medium",
+      "question": "What regulatory risks does Alphabet face in the European Union according to its 2025 10-K?",
+      "ground_truth": "Alphabet faces significant regulatory risks in the European Union, including compliance obligations under the Digital Markets Act (DMA) which designates Google as a gatekeeper for several of its services and requires changes to how Google operates its search, advertising, and mobile platform businesses. Alphabet also faces data protection requirements under the General Data Protection Regulation (GDPR), potential antitrust fines from the European Commission related to past practices in advertising and shopping, and ongoing competition investigations. Non-compliance with the DMA can result in fines of up to 10% of annual global turnover.",
+      "tags": ["regulatory", "eu", "risk_factors", "alphabet"]
+    },
+
+    {
+      "id": "googl-007",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "youtube",
+      "difficulty": "medium",
+      "question": "How does YouTube contribute to Alphabet's revenues and what formats does it offer?",
+      "ground_truth": "YouTube contributes to Alphabet's Google Services segment through advertising revenues, including revenue from ads shown before, during, and alongside YouTube content. YouTube also generates subscription revenues from YouTube Premium (an ad-free subscription) and YouTube TV (a live television streaming service). YouTube Shorts, the platform's short-form video format, has also grown significantly and contributes to advertiser engagement. YouTube is described as one of the largest video platforms globally by viewership.",
+      "tags": ["youtube", "revenue", "alphabet"]
+    },
+
+    {
+      "id": "googl-008",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Alphabet's net income for fiscal year 2025?",
+      "ground_truth": "Alphabet's net income for fiscal year 2025 was $132,170 million.",
+      "tags": ["net_income", "financials", "alphabet"]
+    },
+
+    {
+      "id": "googl-009",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "competition",
+      "difficulty": "medium",
+      "question": "How does Alphabet describe the competitive risks to its advertising business?",
+      "ground_truth": "Alphabet's advertising business faces competition from other digital advertising platforms including Meta Platforms (Facebook and Instagram), Amazon, Microsoft (Bing and LinkedIn), TikTok, and Apple. Alphabet notes that competition for digital advertising spend is intensifying as more platforms offer advertising capabilities. Risks include changes in user behavior, regulatory requirements to share data or allow interoperability, privacy-related changes that affect ad targeting, and the emergence of AI-powered search and discovery tools that could change how users find information and products online.",
+      "tags": ["competition", "advertising", "risk_factors", "alphabet"]
+    },
+
+    {
+      "id": "googl-010",
+      "company": "Alphabet",
+      "ticker": "GOOGL",
+      "category": "capital_allocation",
+      "difficulty": "medium",
+      "question": "How does Alphabet approach capital return to shareholders through share repurchases?",
+      "ground_truth": "Alphabet returns capital to shareholders primarily through its Class A and Class C share repurchase program. Alphabet's board of directors has authorized significant buyback amounts and the company has repurchased substantial amounts of stock in recent years. Alphabet does not pay a regular cash dividend on its common stock and instead focuses capital return on share repurchases. The amount and timing of repurchases depend on market conditions, legal requirements, and other business considerations.",
+      "tags": ["capital_allocation", "buybacks", "alphabet"]
+    },
+
+    {
+      "id": "v-001",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "leadership",
+      "difficulty": "easy",
+      "question": "Who is the Chief Executive Officer of Visa Inc. as of fiscal year 2025?",
+      "ground_truth": "Ryan McInerney serves as the Chief Executive Officer of Visa Inc.",
+      "tags": ["executive", "leadership", "visa"]
+    },
+
+    {
+      "id": "v-002",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "revenue_model",
+      "difficulty": "medium",
+      "question": "What are Visa's four primary revenue categories as described in its 2025 annual report?",
+      "ground_truth": "Visa generates revenues from four primary categories: (1) Service revenues, which are fees for supporting payment transactions on the Visa network charged to financial institution clients based on payment volumes; (2) Data processing revenues, which are fees for authorization, clearing, settlement, network access, and other transaction processing services; (3) International transaction revenues, which are fees for cross-border transactions and currency conversion activities; and (4) Other revenues, which include fees from value-added services such as risk management, data analytics, and licensing.",
+      "tags": ["revenue", "business_model", "visa"]
+    },
+
+    {
+      "id": "v-003",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Visa's total net revenues for fiscal year 2025?",
+      "ground_truth": "Visa's total net revenues for fiscal year ended September 30, 2025 were $40,000 million.",
+      "tags": ["revenue", "financials", "visa"]
+    },
+
+    {
+      "id": "v-004",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "business_model",
+      "difficulty": "medium",
+      "question": "How does Visa describe its role in the global payment ecosystem?",
+      "ground_truth": "Visa operates a global payment network that connects financial institutions, consumers, merchants, and businesses. Critically, Visa does not issue cards, extend credit to consumers, or set the rates and fees charged to cardholders — those functions are performed by Visa's financial institution clients (issuers and acquirers). Instead, Visa licenses its brand and provides the network infrastructure, technology, and services that enable electronic payment transactions between cardholders and merchants through Visa's issuing and acquiring bank partners.",
+      "tags": ["business_model", "network", "visa"]
+    },
+
+    {
+      "id": "v-005",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "visa_direct",
+      "difficulty": "medium",
+      "question": "What is Visa Direct and why is it strategically important to Visa?",
+      "ground_truth": "Visa Direct is Visa's real-time push payments platform that enables funds to be pushed directly to bank accounts, debit cards, and digital wallets in real time. Unlike traditional pull payment models where merchants initiate payment from a consumer's account, Visa Direct pushes funds from a sender to a recipient. Use cases include person-to-person payments, business-to-consumer disbursements such as insurance payouts and gig economy earnings, and government disbursements. Visa views Visa Direct as a key growth driver enabling it to participate in payment flows beyond traditional card transactions.",
+      "tags": ["visa_direct", "payments", "growth", "visa"]
+    },
+
+    {
+      "id": "v-006",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "risk_factors",
+      "difficulty": "medium",
+      "question": "What cybersecurity risks does Visa identify in its 2025 10-K?",
+      "ground_truth": "Visa identifies significant cybersecurity risks including unauthorized access to its payment network and systems, breaches that could compromise sensitive financial data for cardholders, merchants, and financial institutions, service disruptions that could prevent processing of payment transactions, and increasingly sophisticated cyberattacks. Visa's role as a critical payment network infrastructure makes it a high-value target for cybercriminals and state-sponsored actors. A successful breach or service outage could result in significant financial losses, reputational damage, regulatory penalties, and loss of client and consumer confidence.",
+      "tags": ["cybersecurity", "risk_factors", "visa"]
+    },
+
+    {
+      "id": "v-007",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "competition",
+      "difficulty": "medium",
+      "question": "How does Visa describe competitive threats to its payment network business?",
+      "ground_truth": "Visa faces competition from other global payment networks including Mastercard, as well as regional networks such as China UnionPay. Visa also faces competition from alternative payment methods and platforms including PayPal, Apple Pay, Google Pay, Cash App, Venmo, and bank-based payment systems. Additionally, real-time payment systems operated by central banks and governments (such as FedNow in the United States and UPI in India) represent competitive alternatives. Visa also acknowledges the potential disruptive impact of central bank digital currencies (CBDCs) and blockchain-based payment systems.",
+      "tags": ["competition", "risk_factors", "visa"]
+    },
+
+    {
+      "id": "v-008",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Visa's net income for fiscal year 2025?",
+      "ground_truth": "Visa's net income for fiscal year ended September 30, 2025 was 20,058 million USD.",
+      "tags": ["net_income", "financials", "visa"]
+    },
+
+    {
+      "id": "v-009",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "risk_factors",
+      "difficulty": "hard",
+      "question": "What regulatory risks related to interchange fees and network rules does Visa face?",
+      "ground_truth": "Visa faces regulatory risks related to interchange fees, which are fees that flow from acquirers to issuers through Visa's network for each transaction. Regulators in various jurisdictions, particularly in the European Union and United States, have imposed or are considering caps on interchange fees. Visa also faces risks from regulations requiring networks to allow routing of transactions over alternative networks (routing mandates), regulations limiting exclusive network arrangements, and broader competition law investigations into its network practices. Changes to interchange fee structures or routing rules could significantly affect Visa's payment volumes and the economics of its clients' businesses.",
+      "tags": ["regulatory", "interchange", "risk_factors", "visa"]
+    },
+
+    {
+      "id": "v-010",
+      "company": "Visa",
+      "ticker": "V",
+      "category": "operations",
+      "difficulty": "medium",
+      "question": "What total payment volume did Visa process in fiscal year 2025?",
+      "ground_truth": "Visa's total payments volume for fiscal year 2025 was 14.2 trillion USD.",
+      "tags": ["operating_metrics", "volume", "visa"]
+    },
+
+    {
+      "id": "aapl-001",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "leadership",
+      "difficulty": "easy",
+      "question": "Who is the Chief Executive Officer of Apple Inc. as of fiscal year 2025?",
+      "ground_truth": "Tim Cook serves as the Chief Executive Officer of Apple Inc.",
+      "tags": ["executive", "leadership", "apple"]
+    },
+
+    {
+      "id": "aapl-002",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "business_segments",
+      "difficulty": "easy",
+      "question": "What are Apple's primary product and service revenue categories reported in its fiscal 2025 annual report?",
+      "ground_truth": "Apple reports revenues in five categories: iPhone (its line of smartphones), Mac (personal computers including MacBook and iMac), iPad (tablet computers), Wearables, Home and Accessories (including Apple Watch, AirPods, HomePod, and accessories), and Services (including App Store, advertising, Apple Music, Apple TV+, Apple Arcade, iCloud, AppleCare, Apple Pay, and licensing).",
+      "tags": ["segments", "products", "apple"]
+    },
+
+    {
+      "id": "aapl-003",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Apple's total net sales for fiscal year 2025?",
+      "ground_truth": "Apple's total net sales for fiscal year 2025 were 416,161 million USD.",
+      "tags": ["revenue", "financials", "apple"]
+    },
+
+    {
+      "id": "aapl-004",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "services",
+      "difficulty": "medium",
+      "question": "What was Apple's Services revenue for fiscal year 2025 and how does Apple describe this segment?",
+      "ground_truth": "Apple's Services revenues for fiscal year 2025 were $109,158 million USD. Apple's Services segment generates revenue from the App Store commissions and developer fees, Apple Music subscription fees, Apple TV+ subscription fees, Apple Arcade subscriptions, iCloud storage subscriptions, AppleCare extended warranty and support plans, Apple Pay transaction fees, licensing agreements (including payments from Google for being the default search engine on Apple devices), and advertising revenue in the App Store. Apple has highlighted Services as a key growth driver with higher gross margins than its hardware businesses.",
+      "tags": ["services", "revenue", "apple"]
+    },
+
+    {
+      "id": "aapl-005",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "risk_factors",
+      "difficulty": "medium",
+      "question": "What supply chain and manufacturing risks does Apple identify in its 2025 10-K?",
+      "ground_truth": "Apple identifies significant supply chain risks including dependence on single or limited source suppliers for certain components such as semiconductors, displays, and batteries. Apple's manufacturing is heavily concentrated in Asia, particularly in China through contract manufacturers such as Foxconn and Pegatron, creating geographic concentration risk. Apple faces risks from potential disruptions including natural disasters, public health events, geopolitical tensions (particularly US-China relations), trade policy changes including tariffs, and the potential for export controls or restrictions. Apple also faces component shortages that could limit its ability to meet consumer demand.",
+      "tags": ["supply_chain", "risk_factors", "apple"]
+    },
+
+    {
+      "id": "aapl-006",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "risk_factors",
+      "difficulty": "hard",
+      "question": "What regulatory risks does Apple face related to the App Store and digital markets regulations?",
+      "ground_truth": "Apple faces significant regulatory risks related to its App Store business model, particularly regarding the commissions it charges developers (typically 15-30% of in-app purchases and subscriptions) and its policies restricting third-party app distribution on iOS devices. The European Union's Digital Markets Act (DMA) has required Apple to allow alternative app stores and third-party payment processors in the EU. Apple also faces ongoing antitrust investigations in the United States, Japan, South Korea, and other jurisdictions related to App Store practices. Legal proceedings from Epic Games and class action lawsuits from developers have also challenged Apple's practices. Changes required by regulators could reduce Apple's Services revenue.",
+      "tags": ["regulatory", "app_store", "risk_factors", "apple"]
+    },
+
+    {
+      "id": "aapl-007",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "geography",
+      "difficulty": "medium",
+      "question": "What are Apple's geographic revenue segments and how does it describe the risks of its China business?",
+      "ground_truth": "Apple reports revenue across five geographic segments: Americas, Europe, Greater China, Japan, and Rest of Asia Pacific. Greater China (which includes mainland China, Hong Kong, and Taiwan) is a significant revenue market for Apple. Apple identifies China-related risks including potential regulatory restrictions on Apple products or services in China, US-China trade tensions and tariffs, local competition from Chinese smartphone manufacturers, intellectual property risks, and the geographic concentration of its manufacturing operations in China. Changes in Chinese government policy, consumer sentiment, or trade restrictions could materially affect Apple's business.",
+      "tags": ["geography", "china", "risk_factors", "apple"]
+    },
+
+    {
+      "id": "aapl-008",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Apple's net income for fiscal year 2025?",
+      "ground_truth": "Apple's net income for fiscal year 2025 was 112,010 million USD.",
+      "tags": ["net_income", "financials", "apple"]
+    },
+
+    {
+      "id": "aapl-009",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "capital_allocation",
+      "difficulty": "medium",
+      "question": "What is Apple's approach to returning capital to shareholders through buybacks and dividends?",
+      "ground_truth": "Apple has one of the largest share repurchase programs in corporate history and has returned substantial capital to shareholders. Apple's board of directors has authorized significant share repurchase amounts and the company has reduced its diluted share count substantially over many years. Apple also pays a quarterly cash dividend to shareholders. Apple's capital return program is funded by its strong free cash flow generation and has been a consistent priority of management.",
+      "tags": ["capital_allocation", "buybacks", "dividends", "apple"]
+    },
+
+    {
+      "id": "aapl-010",
+      "company": "Apple",
+      "ticker": "AAPL",
+      "category": "competition",
+      "difficulty": "medium",
+      "question": "How does Apple describe competition in the smartphone market in its 2025 10-K?",
+      "ground_truth": "Apple competes in the highly competitive smartphone market primarily against manufacturers using the Android operating system, including Samsung Electronics, Xiaomi, OPPO, and other handset makers. Competition is based on innovation, product design, ecosystem integration, app availability, brand loyalty, privacy features, and price. Apple differentiates iPhone through tight integration of hardware and software, the iOS and iCloud ecosystem, Apple Silicon chips, and its positioning as a premium brand. Apple acknowledges that intensifying competition could result in pricing pressure and market share changes.",
+      "tags": ["competition", "iphone", "apple"]
+    },
+
+    {
+      "id": "ms-001",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "leadership",
+      "difficulty": "easy",
+      "question": "Who is the Chief Executive Officer of Morgan Stanley as of December 31, 2025?",
+      "ground_truth": "Ted Pick serves as the Chief Executive Officer of Morgan Stanley. Pick assumed the role of CEO in January 2024.",
+      "tags": ["executive", "leadership", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-002",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "business_segments",
+      "difficulty": "easy",
+      "question": "What are Morgan Stanley's three primary business segments as described in its 2025 annual report?",
+      "ground_truth": "Morgan Stanley operates three business segments: (1) Institutional Securities, which provides investment banking, equity and fixed income sales and trading, and corporate lending to corporations, governments, and institutional investors; (2) Wealth Management, which provides brokerage, investment advisory, financial planning, banking, and retirement services to individual investors; and (3) Investment Management, which provides asset management products and services to institutional and individual investors globally.",
+      "tags": ["segments", "business_model", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-003",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What were Morgan Stanley's total net revenues for fiscal year 2025?",
+      "ground_truth": "Morgan Stanley's total net revenues for fiscal year 2025 were 70,634 million USD.",
+      "tags": ["revenue", "financials", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-004",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "wealth_management",
+      "difficulty": "medium",
+      "question": "How does Morgan Stanley's Wealth Management segment generate revenue?",
+      "ground_truth": "Morgan Stanley's Wealth Management segment generates revenue from asset management fees charged on client assets in fee-based accounts (which provide recurring revenue tied to assets under management), transactional commissions and fees on brokerage activities, net interest income from loans to clients and bank deposits, and financial planning and advice fees. The segment serves individual investors, high-net-worth individuals, family offices, and small and mid-sized businesses. Morgan Stanley has strategically shifted toward fee-based relationships which provide more predictable recurring revenues compared to transactional commissions.",
+      "tags": ["wealth_management", "revenue", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-005",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "risk_management",
+      "difficulty": "hard",
+      "question": "How does Morgan Stanley describe its risk management framework in its 2025 10-K?",
+      "ground_truth": "Morgan Stanley employs a comprehensive risk management framework encompassing market risk, credit risk, liquidity and funding risk, operational risk, and model risk. Risk oversight is managed by the Chief Risk Officer and reviewed by the Board's Risk Committee. Morgan Stanley uses quantitative tools including Value-at-Risk (VaR) models, stress testing, and scenario analysis to measure and monitor risk exposures across its trading and investment portfolios. The firm also conducts internal stress tests and participates in the Federal Reserve's annual Comprehensive Capital Analysis and Review (CCAR) process, which assesses its capital adequacy under hypothetical adverse economic scenarios.",
+      "tags": ["risk_management", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-006",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "regulatory",
+      "difficulty": "hard",
+      "question": "What regulatory capital requirements does Morgan Stanley describe in its 2025 annual report?",
+      "ground_truth": "As a bank holding company supervised by the Federal Reserve, Morgan Stanley is subject to comprehensive regulatory capital requirements including the Common Equity Tier 1 (CET1) capital ratio, Tier 1 capital ratio, Total capital ratio, and Tier 1 leverage ratio. Morgan Stanley is subject to a Global Systemically Important Bank (G-SIB) surcharge based on its systemic importance, which increases its minimum capital requirements. The firm is also subject to Stress Capital Buffer (SCB) requirements determined by the Federal Reserve's annual stress testing process, which can vary from year to year. Morgan Stanley must also comply with the Supplementary Leverage Ratio (SLR) requirements applicable to systemically important institutions.",
+      "tags": ["regulatory", "capital", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-007",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "financials",
+      "difficulty": "easy",
+      "question": "What was Morgan Stanley's net income applicable to common shareholders for fiscal year 2025?",
+      "ground_truth": "Morgan Stanley's net income applicable to Morgan Stanley for fiscal year 2025 was 16.249 billion USD.",
+      "tags": ["net_income", "financials", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-008",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "institutional_securities",
+      "difficulty": "medium",
+      "question": "What services does Morgan Stanley's Institutional Securities segment provide and how does it generate revenue?",
+      "ground_truth": "Morgan Stanley's Institutional Securities segment provides investment banking services including equity and debt underwriting, mergers and acquisitions advisory, and financial restructuring advice to corporations and governments. The segment also provides equity and fixed income sales and trading services to institutional clients including hedge funds, asset managers, pension funds, and sovereign wealth funds. Revenue is generated from underwriting fees, advisory fees, trading gains and losses, commissions, and net interest income from financing activities. Institutional Securities revenues are highly variable and sensitive to market conditions and capital markets activity.",
+      "tags": ["institutional_securities", "investment_banking", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-009",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "risk_factors",
+      "difficulty": "medium",
+      "question": "What market risk factors does Morgan Stanley identify in its 2025 10-K?",
+      "ground_truth": "Morgan Stanley identifies several market risk factors including equity price risk from its trading positions and investments, interest rate risk from changes in interest rates affecting the value of fixed income instruments and its net interest income, credit spread risk from changes in credit spreads affecting the value of corporate and sovereign debt, and foreign currency risk from positions in non-dollar currencies. The firm notes that adverse market conditions, including sharp market downturns, can simultaneously reduce client activity and generate trading losses, amplifying the impact on revenues. Morgan Stanley's trading book is subject to daily VaR limits and stress testing.",
+      "tags": ["market_risk", "risk_factors", "morgan_stanley"]
+    },
+
+    {
+      "id": "ms-010",
+      "company": "Morgan Stanley",
+      "ticker": "MS",
+      "category": "competition",
+      "difficulty": "medium",
+      "question": "How does Morgan Stanley describe competition in its wealth management and investment management businesses?",
+      "ground_truth": "Morgan Stanley's Wealth Management segment faces competition from other full-service broker-dealers (including Merrill Lynch/Bank of America and UBS), registered investment advisers, banks offering private banking and wealth management services, and digital investment platforms (including robo-advisors). Competition is based on the quality of financial advisors, investment performance, breadth of product offerings, technology platforms, fees, and brand reputation. The Investment Management segment competes with asset managers including BlackRock, Vanguard, Fidelity, and other investment management firms for institutional and individual investor assets.",
+      "tags": ["competition", "wealth_management", "morgan_stanley"]
+    }
+
+  ]
+}

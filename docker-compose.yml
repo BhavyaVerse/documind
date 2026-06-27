@@ -1,0 +1,62 @@
+# Local development orchestration for DocuMind.
+#
+# Usage:
+#   docker compose up --build        # first run — builds image + runs ingest
+#   docker compose up                # subsequent runs — reuses built image
+#   docker compose down              # stop containers
+#   docker compose logs -f documind  # stream logs
+#
+# Volume strategy:
+#   data/documents/  — our source PDFs (read by ingest.py)
+#   data/chroma_db/  — built by ingest.py, persisted on our host
+#   data/bm25_index.pkl — built by ingest.py, persisted on our host
+#   config/          — prompts.yaml and other config files
+#
+# ingest.py only runs once (on first `docker compose up`).
+# On every subsequent start, the container reuses the indexes from your host.
+# Run `docker compose run --rm documind python ingest.py` to force a rebuild.
+services:
+  documind:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: documind
+ 
+    ports:
+      - "8000:8000"
+ 
+    # Load all secrets from your .env file.
+    # Never hardcode API keys in this file.
+    env_file:
+      - .env
+ 
+    # Override specific environment variables if needed
+    environment:
+      - PORT=8000
+      - PYTHONUNBUFFERED=1       # print Python logs immediately (no buffering)
+      - PYTHONDONTWRITEBYTECODE=1
+ 
+    volumes:
+      # Mount source documents so you can add PDFs without rebuilding the image
+      - ./data/documents:/app/data/documents
+ 
+      # Persist the built indexes on your host machine.
+      # This means ingest.py only runs once across container restarts.
+      - ./data/chroma_db:/app/data/chroma_db
+      - ./data:/app/data
+ 
+      # Mount config so prompt changes take effect without rebuilding
+      - ./config:/app/config
+ 
+    # Restart the container automatically if it crashes
+    restart: unless-stopped
+ 
+    # Docker-level health check (also defined in Dockerfile, repeated here
+    # so docker compose ps shows a health status)
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 300s    # allow 5 min for first-time ingest to complete
+ 

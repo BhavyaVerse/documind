@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+
+# Environment variables and secrets
+.env
+
+# ChromaDB persisted data
+data/chroma_db/
+
+# BM25 index (Phase 2)
+data/bm25_index.pkl
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Docker
+*.log
